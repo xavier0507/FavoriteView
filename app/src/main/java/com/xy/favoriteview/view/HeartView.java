@@ -11,10 +11,12 @@ import android.view.View;
  */
 
 public class HeartView extends View {
-    private static final int DEFAULT_COLOR = 0xFFFF4081;
+    public static final int ORIGINAL_COLOR = 0xFF444444;
+    public static final int FINAL_COLOR = 0xFFFF88C2;
 
     private Paint circlePaint;
-    private int heartColor = DEFAULT_COLOR;
+    private int heartColor = ORIGINAL_COLOR;
+    private int currentColor = ORIGINAL_COLOR;
 
     public HeartView(Context context) {
         this(context, null);
@@ -57,5 +59,11 @@ public class HeartView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         this.drawHeart(canvas);
+    }
+
+    public void setHeartColor(int currentColor) {
+        this.currentColor = currentColor;
+        this.circlePaint.setColor(this.currentColor);
+        this.postInvalidate();
     }
 }
