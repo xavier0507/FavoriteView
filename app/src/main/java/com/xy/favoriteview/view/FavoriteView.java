@@ -1,0 +1,91 @@
+package com.xy.favoriteview.view;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+
+import com.xy.favoriteview.R;
+
+/**
+ * Created by Xavier Yin on 5/5/17.
+ */
+
+public class FavoriteView extends FrameLayout {
+    private CircleView circleView;
+    private SideCircleView sideCircleView;
+
+    private AnimatorSet animatorSet;
+    private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
+    private OvershootInterpolator overshootInterpolator = new OvershootInterpolator(4);
+
+    public FavoriteView(Context context) {
+        super(context);
+        this.init();
+    }
+
+    public FavoriteView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.init();
+    }
+
+    public FavoriteView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        this.init();
+    }
+
+    private void init() {
+        View view = LayoutInflater.from(this.getContext()).inflate(R.layout.custom_view_favorite, this, true);
+        this.circleView = (CircleView) view.findViewById(R.id.view_circle);
+        this.sideCircleView = (SideCircleView) view.findViewById(R.id.view_side_circle);
+    }
+
+    public void launchAnim() {
+        this.circleView.setInnerCircleRadiusProgress(0);
+        this.circleView.setOuterCircleRadiusProgress(0);
+        this.sideCircleView.setCurrentProgress(0);
+
+        ObjectAnimator outerCircleAnimator = ObjectAnimator.ofFloat(this.circleView, CircleView.OUTER_CIRCLE_RADIUS_PROGRESS, 0.1f, 1f);
+        outerCircleAnimator.setDuration(300);
+        outerCircleAnimator.setInterpolator(this.decelerateInterpolator);
+
+        ObjectAnimator innerCircleAnimator = ObjectAnimator.ofFloat(this.circleView, CircleView.INNER_CIRCLE_RADIUS_PROGRESS, 0.1f, 1f);
+        innerCircleAnimator.setDuration(350);
+        innerCircleAnimator.setStartDelay(100);
+        innerCircleAnimator.setInterpolator(this.decelerateInterpolator);
+
+        ObjectAnimator sideCircleAnimator = ObjectAnimator.ofFloat(this.sideCircleView, this.sideCircleView.SIDE_CIRCLE_PROGRESS, 0, 1f);
+        sideCircleAnimator.setDuration(600);
+        sideCircleAnimator.setStartDelay(300);
+        sideCircleAnimator.setInterpolator(this.decelerateInterpolator);
+
+        final ObjectAnimator heartScaleYAnimator = ObjectAnimator.ofFloat(this, ImageView.SCALE_Y, 0.2f, 1f);
+        heartScaleYAnimator.setDuration(500);
+        heartScaleYAnimator.setInterpolator(this.overshootInterpolator);
+
+        ObjectAnimator heartScaleXAnimator = ObjectAnimator.ofFloat(this, ImageView.SCALE_X, 0.2f, 1f);
+        heartScaleXAnimator.setDuration(500);
+        heartScaleXAnimator.setInterpolator(this.overshootInterpolator);
+
+        this.animatorSet = new AnimatorSet();
+        this.animatorSet.playTogether(outerCircleAnimator, innerCircleAnimator, heartScaleYAnimator, heartScaleXAnimator, sideCircleAnimator);
+        this.animatorSet.addListener(new AnimatorListenerAdapter() {
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                circleView.setInnerCircleRadiusProgress(0);
+                circleView.setOuterCircleRadiusProgress(0);
+                sideCircleView.setCurrentProgress(0);
+            }
+        });
+        this.animatorSet.start();
+    }
+}
