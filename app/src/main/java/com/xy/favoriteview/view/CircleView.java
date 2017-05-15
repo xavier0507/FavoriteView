@@ -1,6 +1,5 @@
 package com.xy.favoriteview.view;
 
-import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
