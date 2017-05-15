@@ -5,10 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.xy.favoriteview.activity.MainActivity">
 
     <com.xy.favoriteview.view.FavoriteView
         android:id="@+id/view_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_clean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="恢復原狀態" />
 </LinearLayout>

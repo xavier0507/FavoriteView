@@ -60,7 +60,6 @@ public class FavoriteView extends FrameLayout {
         this.circleView.setInnerCircleRadiusProgress(0);
         this.circleView.setOuterCircleRadiusProgress(0);
         this.sideCircleView.setCurrentProgress(0);
-        this.heartView.setHeartColor(ORIGINAL_COLOR);
 
         final ObjectAnimator outerCircleAnimator = ObjectAnimator.ofFloat(this.circleView, CircleView.OUTER_CIRCLE_RADIUS_PROGRESS, 0.1f, 1f);
         outerCircleAnimator.setDuration(300);
@@ -106,5 +105,18 @@ public class FavoriteView extends FrameLayout {
             }
         });
         this.animatorSet.start();
+    }
+
+    public void cleanHearColor() {
+        final ValueAnimator heartColorAnimator = ValueAnimator.ofInt(FINAL_COLOR, ORIGINAL_COLOR);
+        heartColorAnimator.setEvaluator(this.argbEvaluator);
+        heartColorAnimator.setDuration(1500);
+        heartColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                heartView.setHeartColor((int) animation.getAnimatedValue());
+            }
+        });
+        heartColorAnimator.start();
     }
 }
